@@ -3,430 +3,253 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulador Examen Licencia CDMX</title>
+    <title>Simulador Examen Licencia</title>
     <style>
-        /* ===== ESTILO COPIADO DE TU LOGIN (AZUL OSCURO) ===== */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+        /* ===== ESTILOS GLOBALES ===== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            /* CAMBIO 2: FONDO AMARILLO PÁLIDO */
+            background: #FFF8E1; 
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
         }
-        
+
         .container {
-            background: rgba(255,255,255,0.95);
-            padding: 40px 35px;
-            border-radius: 30px;
-            max-width: 700px;
+            background: #ffffff;
             width: 100%;
+            max-width: 1000px;
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
             text-align: center;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
             position: relative;
         }
 
-        /* ===== TÍTULOS ===== */
-        .logo {
-            font-size: 2.5rem;
+        /* ===== ENCABEZADO ===== */
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
             margin-bottom: 5px;
         }
-        
+
+        /* CAMBIO 1: EL AUTO NEGRO MÁS GRANDE */
+        .header-top .logo-auto {
+            width: 60px; /* Antes era pequeño, ahora es más grande */
+            height: auto;
+        }
+
         h1 {
-            color: #1a1a2e;
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-        }
-        
-        h1 span {
-            color: #0f3460;
+            color: #1e293b;
+            font-size: 28px;
+            font-weight: 700;
         }
 
-        /* ===== BARRA DE PROGRESO Y PUNTUACIÓN ===== */
-        .header-info {
+        .header-subtitle {
+            font-size: 16px;
+            color: #64748b;
+            margin-bottom: 20px;
+            font-weight: 400;
+        }
+
+        /* ===== BARRA DE INFORMACIÓN ===== */
+        .info-bar {
+            background: #f1f5f9;
+            border-radius: 12px;
+            padding: 12px 20px;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+            font-size: 14px;
+            color: #475569;
+        }
+
+        .info-bar span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* ===== TÍTULO DE SELECCIÓN ===== */
+        .selection-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 10px;
+        }
+
+        .selection-desc {
+            color: #64748b;
+            font-size: 16px;
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.5;
+        }
+
+        /* ===== TARJETAS DE NIVELES ===== */
+        .levels-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .level-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 30px 25px;
+            width: 250px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: block;
+        }
+
+        .level-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
+            border-color: #cbd5e1;
+        }
+
+        /* Círculo de color en la tarjeta */
+        .level-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin: 0 auto 15px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .level-card.facil .level-icon {
+            background: #22c55e; /* Verde */
+            color: white;
+        }
+
+        .level-card.dificil .level-icon {
+            background: #ef4444; /* Rojo */
+            color: white;
+        }
+
+        .level-card h3 {
+            font-size: 20px;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .level-card p {
+            font-size: 14px;
+            color: #64748b;
             margin-bottom: 15px;
-            font-weight: bold;
-            color: #1a1a2e;
-            font-size: 0.95rem;
         }
 
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: #e2e8f0;
-            border-radius: 10px;
-            margin-bottom: 25px;
-            overflow: hidden;
+        .level-tags {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
         }
 
-        .progress-fill {
-            height: 100%;
-            background: #0f3460; /* Barra azul oscura */
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-
-        /* ===== PREGUNTA Y OPCIONES ===== */
-        .question-text {
-            font-size: 18px;
-            margin-bottom: 20px;
-            color: #1a1a2e;
+        .level-tags .tag {
+            background: #eff6ff;
+            color: #3b82f6;
+            font-size: 12px;
+            padding: 4px 12px;
+            border-radius: 20px;
             font-weight: 600;
         }
 
-        .options-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 25px;
-        }
-
-        .option-btn {
-            background: #f8f9fa;
-            border: 2px solid #ced4da;
-            border-radius: 12px; /* Bordes redondeados como el login */
-            padding: 14px 18px;
-            text-align: left;
-            font-size: 1rem;
-            font-family: inherit;
-            cursor: pointer;
-            transition: all 0.2s;
-            color: #1a1a2e;
-        }
-
-        .option-btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            border-color: #0f3460;
-            box-shadow: 0 4px 8px rgba(15,52,96,0.2);
-        }
-
-        .option-btn.correct {
-            background: #d4edda;
-            border-color: #28a745;
-            color: #155724;
-        }
-
-        .option-btn.incorrect {
-            background: #f8d7da;
-            border-color: #dc3545;
-            color: #721c24;
-        }
-
-        .option-btn:disabled {
-            cursor: not-allowed;
-            opacity: 0.8;
-        }
-
-        /* ===== BOTONES (Estilo azul oscuro igual al login) ===== */
-        .btn-action {
-            background: #0f3460;
-            color: white;
-            border: none;
-            padding: 16px 40px;
-            border-radius: 30px;
-            font-weight: bold;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: 0.3s;
-            font-family: inherit;
-            box-shadow: 0 4px 0 #0a1f3a;
-            margin-top: 10px;
-            display: none; /* Oculto inicialmente */
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        .btn-action:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 0 #0a1f3a;
-        }
-
-        .btn-start {
-            background: #0f3460;
-            color: white;
-            border: none;
-            padding: 16px 50px;
-            border-radius: 30px;
-            font-weight: bold;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: 0.3s;
-            font-family: inherit;
-            box-shadow: 0 4px 0 #0a1f3a;
-        }
-
-        .btn-start:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 0 #0a1f3a;
-        }
-
-        .btn-restart {
-            background: #0f3460;
-            color: white;
-            border: none;
-            padding: 16px 40px;
-            border-radius: 30px;
-            font-weight: bold;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: 0.3s;
-            font-family: inherit;
-            box-shadow: 0 4px 0 #0a1f3a;
-        }
-
-        .btn-restart:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 0 #0a1f3a;
-        }
-
-        /* ===== PANTALLAS (Inicio, Examen, Resultados) ===== */
-        #welcome-screen, #result-screen {
-            padding: 10px 0;
-        }
-
-        #welcome-screen p {
-            color: #6c757d;
-            font-size: 0.95rem;
-            margin-bottom: 25px;
-        }
-
-        #result-screen h2 {
-            font-size: 28px;
-            margin-bottom: 10px;
-            color: #1a1a2e;
-        }
-
-        .score-big {
-            font-size: 48px;
-            font-weight: bold;
-            color: #0f3460;
-            margin: 10px 0;
-        }
-
-        #result-screen .message {
-            margin: 15px 0 25px 0;
-            font-size: 1rem;
-            color: #6c757d;
-        }
-
         /* ===== RESPONSIVE ===== */
-        @media (max-width: 600px) {
-            .container { padding: 25px 15px; }
-            h1 { font-size: 1.5rem; }
-            .question-text { font-size: 16px; }
+        @media (max-width: 768px) {
+            .container { padding: 25px; }
+            h1 { font-size: 24px; }
+            .header-top .logo-auto { width: 50px; }
+            .info-bar { flex-direction: column; align-items: center; gap: 8px; }
+            .levels-container { flex-direction: column; align-items: center; }
+            .level-card { width: 100%; max-width: 320px; }
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <div class="logo">🚗</div>
-        <h1>Simulador <span>Licencia CDMX</span></h1>
-
-        <!-- Pantalla de Inicio -->
-        <div id="welcome-screen">
-            <p>Responde las 10 preguntas del examen teórico para obtener tu licencia de conducir.</p>
-            <button class="btn-start" onclick="startExam()">Comenzar Examen</button>
-        </div>
-
-        <!-- Pantalla del Examen -->
-        <div id="exam-screen" style="display: none;">
-            <div class="header-info">
-                <span id="question-counter">Pregunta 1 de 10</span>
-                <span id="score-display">Aciertos: 0</span>
-            </div>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progress-fill"></div>
-            </div>
-
-            <div class="question-text" id="question-text">Cargando pregunta...</div>
+        <!-- ENCABEZADO -->
+        <div class="header-top">
+            <!-- CAMBIO 1: AUTO NEGRO MÁS GRANDE (Uso un emoji, si tienes imagen PNG cámbialo por <img src="...">) -->
+            <img src="https://cdn-icons-png.flaticon.com/512/3202/3202927.png" alt="Auto Negro" class="logo-auto">
             
-            <div class="options-list" id="options-list">
-                <!-- Las opciones se llenarán con JS -->
-            </div>
+            <!-- CAMBIO 3: NOMBRE DE LA ESCUELA -->
+            <h1>Instituto Tecnológico de México</h1> 
+        </div>
+        <div class="header-subtitle">Licencia de Conducir · Simulador Oficial</div>
 
-            <button class="btn-action" id="btn-next" onclick="nextQuestion()">Siguiente Pregunta</button>
+        <!-- BARRA DE INFORMACIÓN -->
+        <div class="info-bar">
+            <span>📄 20 preguntas aleatorias</span>
+            <span>⏱️ Tiempo limitado</span>
+            <span>📊 Calificación mínima 8.0</span>
         </div>
 
-        <!-- Pantalla de Resultados -->
-        <div id="result-screen" style="display: none;">
-            <h2 id="result-title">¡Examen Finalizado!</h2>
-            <div class="score-big" id="final-score">0/10</div>
-            <div class="message" id="result-message">Tu resultado está siendo evaluado...</div>
-            <button class="btn-restart" onclick="restartExam()">Reintentar Examen</button>
+        <!-- TÍTULO DE SELECCIÓN -->
+        <div class="selection-title">
+            <span>🎯</span> Elige tu nivel
+        </div>
+        <p class="selection-desc">
+            Practica con preguntas reales del Reglamento de Tránsito y la Ley de Movilidad. 
+            El modo <strong>Difícil</strong> replica las condiciones exactas del examen oficial.
+        </p>
+
+        <!-- TARJETAS DE NIVEL -->
+        <div class="levels-container">
+            
+            <!-- TARJETA FÁCIL -->
+            <!-- Si tienes un archivo examen_facil.html, cambia el href -->
+            <a href="examen_facil.html" class="level-card facil">
+                <div class="level-icon">🟢</div>
+                <h3>Fácil</h3>
+                <p>Con pistas y más<br>tiempo</p>
+                <div class="level-tags">
+                    <span class="tag">⏱️ 30 min</span>
+                    <span class="tag">💡 2 pistas</span>
+                </div>
+            </a>
+
+            <!-- TARJETA DIFÍCIL -->
+            <!-- Si tienes un archivo examen_dificil.html, cambia el href -->
+            <a href="examen_dificil.html" class="level-card dificil">
+                <div class="level-icon">🔴</div>
+                <h3>Difícil</h3>
+                <p>Como el examen real</p>
+                <div class="level-tags">
+                    <span class="tag">⏱️ 25 min</span>
+                    <span class="tag">🚫 sin pistas</span>
+                </div>
+            </a>
+
         </div>
     </div>
 
-    <script>
-        // ===== BASE DE DATOS DE PREGUNTAS (10 preguntas) =====
-        const questions = [
-            {
-                question: "¿Cuál es la velocidad máxima permitida en avenidas principales de la CDMX?",
-                options: ["40 km/h", "50 km/h", "60 km/h", "70 km/h"],
-                correct: 1
-            },
-            {
-                question: "¿Qué significa una luz amarilla intermitente en un semáforo?",
-                options: ["Detenerse obligatoriamente", "Precaución y ceder el paso", "Acelerar para cruzar", "Alto total"],
-                correct: 1
-            },
-            {
-                question: "¿Cada cuánto tiempo se debe renovar la licencia de conducir para particulares?",
-                options: ["Cada año", "Cada 2 años", "Cada 3 años", "Cada 5 años"],
-                correct: 2
-            },
-            {
-                question: "En una glorieta, ¿quién tiene la preferencia de paso?",
-                options: ["El vehículo que entra", "El vehículo que ya está dentro", "El vehículo más rápido", "El de la derecha"],
-                correct: 1
-            },
-            {
-                question: "¿Está permitido estacionarse en una parada de autobús?",
-                options: ["Sí, por unos minutos", "Sí, si no hay autobús", "No, nunca", "Solo si es de noche"],
-                correct: 2
-            },
-            {
-                question: "¿Cuál es el límite de alcohol en sangre para conducir en la CDMX?",
-                options: ["0.00 g/L", "0.05 g/L", "0.08 g/L", "0.10 g/L"],
-                correct: 1
-            },
-            {
-                question: "Si un peatón está cruzando la calle en un paso de cebra, ¿qué debes hacer?",
-                options: ["Tocar el claxon", "Esperar a que cruce", "Pasar rápido por atrás", "Pasar primero si no te ve"],
-                correct: 1
-            },
-            {
-                question: "¿Qué documento NO es obligatorio portar al conducir?",
-                options: ["Tarjeta de circulación", "Licencia de conducir", "Constancia de seguro", "Factura del auto"],
-                correct: 3
-            },
-            {
-                question: "¿Cómo se llama la distancia que debe mantener un auto con el de adelante?",
-                options: ["Distancia de frenado", "Distancia de seguridad", "Distancia de reacción", "Distancia mínima"],
-                correct: 1
-            },
-            {
-                question: "¿Está permitido usar el teléfono celular mientras se conduce con manos libres?",
-                options: ["Sí, siempre", "No, nunca", "Sí, pero solo en avenidas", "Sí, solo para GPS"],
-                correct: 1
-            }
-        ];
-
-        // ===== VARIABLES DE ESTADO =====
-        let currentQuestionIndex = 0;
-        let score = 0;
-        let isAnswered = false;
-
-        // ===== ELEMENTOS DEL DOM =====
-        const welcomeScreen = document.getElementById('welcome-screen');
-        const examScreen = document.getElementById('exam-screen');
-        const resultScreen = document.getElementById('result-screen');
-        const questionText = document.getElementById('question-text');
-        const optionsList = document.getElementById('options-list');
-        const btnNext = document.getElementById('btn-next');
-        const questionCounter = document.getElementById('question-counter');
-        const scoreDisplay = document.getElementById('score-display');
-        const progressFill = document.getElementById('progress-fill');
-        const finalScore = document.getElementById('final-score');
-        const resultMessage = document.getElementById('result-message');
-        const resultTitle = document.getElementById('result-title');
-
-        // ===== FUNCIONES PRINCIPALES =====
-        function startExam() {
-            welcomeScreen.style.display = 'none';
-            examScreen.style.display = 'block';
-            currentQuestionIndex = 0;
-            score = 0;
-            isAnswered = false;
-            loadQuestion();
-        }
-
-        function loadQuestion() {
-            const currentQ = questions[currentQuestionIndex];
-            questionText.textContent = currentQ.question;
-            questionCounter.textContent = `Pregunta ${currentQuestionIndex + 1} de ${questions.length}`;
-            scoreDisplay.textContent = `Aciertos: ${score}`;
-            
-            const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
-            progressFill.style.width = `${progress}%`;
-
-            optionsList.innerHTML = '';
-            currentQ.options.forEach((option, index) => {
-                const btn = document.createElement('button');
-                btn.className = 'option-btn';
-                btn.textContent = option;
-                btn.onclick = () => selectOption(index, btn);
-                optionsList.appendChild(btn);
-            });
-
-            btnNext.style.display = 'none';
-            isAnswered = false;
-        }
-
-        function selectOption(index, btnElement) {
-            if (isAnswered) return;
-
-            const currentQ = questions[currentQuestionIndex];
-            const buttons = optionsList.querySelectorAll('.option-btn');
-            
-            buttons.forEach(btn => btn.disabled = true);
-
-            if (index === currentQ.correct) {
-                btnElement.classList.add('correct');
-                score++;
-                scoreDisplay.textContent = `Aciertos: ${score}`;
-            } else {
-                btnElement.classList.add('incorrect');
-                buttons[currentQ.correct].classList.add('correct');
-            }
-
-            isAnswered = true;
-            btnNext.style.display = 'block';
-            
-            if (currentQuestionIndex === questions.length - 1) {
-                btnNext.textContent = 'Ver Resultados';
-            } else {
-                btnNext.textContent = 'Siguiente Pregunta';
-            }
-        }
-
-        function nextQuestion() {
-            currentQuestionIndex++;
-            if (currentQuestionIndex < questions.length) {
-                loadQuestion();
-            } else {
-                showResults();
-            }
-        }
-
-        function showResults() {
-            examScreen.style.display = 'none';
-            resultScreen.style.display = 'block';
-            
-            finalScore.textContent = `${score}/${questions.length}`;
-            const percentage = (score / questions.length) * 100;
-
-            if (percentage >= 80) {
-                resultTitle.textContent = "🎉 ¡Aprobado!";
-                resultMessage.textContent = "Felicidades, has obtenido un excelente resultado. Estás listo para conducir.";
-            } else if (percentage >= 50) {
-                resultTitle.textContent = "⚠️ Por poco...";
-                resultMessage.textContent = "Has obtenido un resultado regular. Te recomendamos estudiar un poco más.";
-            } else {
-                resultTitle.textContent = "📖 Necesitas estudiar";
-                resultMessage.textContent = "Revisa el reglamento de tránsito de la CDMX e inténtalo de nuevo.";
-            }
-        }
-
-        function restartExam() {
-            resultScreen.style.display = 'none';
-            welcomeScreen.style.display = 'block';
-        }
-    </script>
 </body>
 </html>
