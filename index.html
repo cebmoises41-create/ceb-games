@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador Examen Licencia</title>
+    <style>
+        /* ===== ESTILOS GLOBALES ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* FONDO AMARILLO PÁLIDO */
+            background: #FFF8E1; 
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: #ffffff;
+            width: 100%;
+            max-width: 900px;
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            position: relative;
+        }
+
+        /* ===== ENCABEZADO CON EL AUTO ===== */
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 5px;
+        }
+
+        /* EL AUTO Usando el emoji de TAXI (Es negro en la mayoría de sistemas) */
+        .header-top .logo-auto {
+            font-size: 70px; 
+            line-height: 1;
+        }
+
+        h1 {
+            color: #1e293b;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .header-subtitle {
+            font-size: 16px;
+            color: #64748b;
+            margin-bottom: 20px;
+            font-weight: 400;
+        }
+
+        /* ===== BARRA DE INFORMACIÓN ===== */
+        .info-bar {
+            background: #f1f5f9;
+            border-radius: 12px;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+            font-size: 14px;
+            color: #475569;
+        }
+
+        .info-bar span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* ===== TÍTULO DE SELECCIÓN ===== */
+        .selection-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 10px;
+        }
+
+        .selection-desc {
+            color: #64748b;
+            font-size: 16px;
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.5;
+        }
+
+        /* ===== TARJETAS DE NIVELES ===== */
+        .levels-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .level-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 30px 25px;
+            width: 250px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: block;
+            color: inherit;
+        }
+
+        .level-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
+            border-color: #cbd5e1;
+        }
+
+        .level-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin: 0 auto 15px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .level-card.facil .level-icon {
+            background: #22c55e;
+            color: white;
+        }
+
+        .level-card.dificil .level-icon {
+            background: #ef4444;
+            color: white;
+        }
+
+        .level-card h3 {
+            font-size: 20px;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .level-card p {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 15px;
+        }
+
+        .level-tags {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .level-tags .tag {
+            background: #eff6ff;
+            color: #3b82f6;
+            font-size: 12px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 25px; }
+            h1 { font-size: 24px; }
+            .header-top .logo-auto { font-size: 50px; }
+            .info-bar { flex-direction: column; align-items: center; gap: 8px; }
+            .levels-container { flex-direction: column; align-items: center; }
+            .level-card { width: 100%; max-width: 320px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- ENCABEZADO CON EL AUTO NEGRO (TAXI) -->
+        <div class="header-top">
+            <!-- ESTO ES UN AUTO NEGRO (EMOJI DE TAXI) -->
+            <div class="logo-auto">🚕</div>
+            
+            <h1>Escuela de Manejo Conductor Tras el Volante</h1> 
+        </div>
+        <div class="header-subtitle">Licencia de Conducir · Simulador Oficial</div>
+
+        <!-- BARRA DE INFORMACIÓN -->
+        <div class="info-bar">
+            <span>📄 20 preguntas aleatorias</span>
+            <span>⏱️ Tiempo limitado</span>
+            <span>📊 Calificación mínima 8.0</span>
+        </div>
+
+        <!-- TÍTULO DE SELECCIÓN -->
+        <div class="selection-title">
+            <span>🎯</span> Elige tu nivel
+        </div>
+        <p class="selection-desc">
+            Practica con preguntas reales del Reglamento de Tránsito y la Ley de Movilidad. 
+            El modo <strong>Difícil</strong> replica las condiciones exactas del examen oficial.
+        </p>
+
+        <!-- TARJETAS DE NIVEL -->
+        <div class="levels-container">
+            
+            <!-- TARJETA FÁCIL -->
+            <a href="examen_facil.html" class="level-card facil">
+                <div class="level-icon">🟢</div>
+                <h3>Fácil</h3>
+                <p>Con pistas y más<br>tiempo</p>
+                <div class="level-tags">
+                    <span class="tag">⏱️ 30 min</span>
+                    <span class="tag">💡 2 pistas</span>
+                </div>
+            </a>
+
+            <!-- TARJETA DIFÍCIL -->
+            <a href="examen_dificil.html" class="level-card dificil">
+                <div class="level-icon">🔴</div>
+                <h3>Difícil</h3>
+                <p>Como el examen real</p>
+                <div class="level-tags">
+                    <span class="tag">⏱️ 25 min</span>
+                    <span class="tag">🚫 sin pistas</span>
+                </div>
+            </a>
+
+        </div>
+    </div>
+
+</body>
+</html>

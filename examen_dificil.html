@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modo Difícil - Examen CDMX</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #FFF8E1; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .container { background: white; max-width: 800px; width: 100%; padding: 40px; border-radius: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); }
+        h1 { color: #1e293b; text-align: center; margin-bottom: 20px; }
+        .info-bar { display: flex; justify-content: space-between; margin-bottom: 20px; font-weight: bold; color: #475569; }
+        .timer { color: #ef4444; }
+        .progress-bar { width: 100%; height: 8px; background: #f1f5f9; border-radius: 10px; margin-bottom: 20px; }
+        .progress-fill { height: 100%; background: #ef4444; width: 0%; transition: 0.3s; border-radius: 10px; }
+        .question { font-size: 20px; color: #1e293b; font-weight: 600; margin-bottom: 25px; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option { background: #f8fafc; border: 2px solid #e2e8f0; padding: 15px; border-radius: 12px; cursor: pointer; transition: 0.2s; }
+        .option:hover { background: #f1f5f9; }
+        .option.selected { background: #cbd5e1; border-color: #475569; }
+        .option.disabled { pointer-events: none; opacity: 0.6; }
+        
+        /* ESTILOS DE LOS BOTONES */
+        .btn-action {
+            display: none;
+            width: 100%;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 20px auto 0;
+            border: none;
+            color: white;
+        }
+        .btn-next { background: #1e293b; }
+        .btn-next:hover { background: #0f172a; }
+        .btn-submit { background: #ef4444; }
+        .btn-submit:hover { background: #dc2626; }
+
+        #result-screen { display: none; text-align: center; }
+        .score-final { font-size: 48px; font-weight: bold; color: #1e293b; margin: 20px 0; }
+        .pass { color: #22c55e; } .fail { color: #ef4444; }
+        .btn-back { background: #1e293b; color: white; border: none; padding: 15px 40px; border-radius: 30px; font-size: 16px; cursor: pointer; margin-top: 20px; text-decoration: none; display: inline-block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⏱️ Modo Difícil (Real CDMX)</h1>
+        <div id="exam-screen">
+            <div class="info-bar">
+                <span id="counter">1/32</span>
+                <span class="timer" id="timerDisplay">Tiempo: 20:00</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+            <div class="question" id="question">Cargando...</div>
+            <div class="options" id="options"></div>
+            
+            <!-- BOTÓN SIGUIENTE (Aparece en preguntas 1 a 31) -->
+            <button class="btn-action btn-next" id="btnNext" onclick="nextQuestion()">Siguiente pregunta</button>
+            
+            <!-- BOTÓN TERMINAR (Aparece solo en la última pregunta) -->
+            <button class="btn-action btn-submit" id="btnSubmit" onclick="submitExam()">Terminar y calificar</button>
+        </div>
+        <div id="result-screen">
+            <h2 id="resultTitle">Resultado final</h2>
+            <div class="score-final" id="finalScore">0/32</div>
+            <p style="margin-bottom: 20px; font-size: 18px; font-weight: bold; color: #475569;" id="resultMsg"></p>
+            <a href="index.html" class="btn-back">Volver al menú</a>
+        </div>
+    </div>
+
+    <script>
+        const fullQuestions = [
+            { q: "¿Cuál es la velocidad máxima en avenidas principales de la CDMX?", o: ["40 km/h","50 km/h","60 km/h","70 km/h"], a: 1 },
+            { q: "¿Qué significa una luz amarilla intermitente en un semáforo?", o: ["Detenerse","Precaución","Acelerar","Alto total"], a: 1 },
+            { q: "En una glorieta, ¿quién tiene preferencia?", o: ["El que entra","El que está dentro","El más rápido","El de la derecha"], a: 1 },
+            { q: "¿Se puede estacionar en una parada de autobús?", o: ["Sí, unos minutos","Sí, sin bus","No, nunca","Solo de noche"], a: 2 },
+            { q: "Límite de alcohol en sangre en CDMX para automovilista:", o: ["0.0 g/L","0.05 g/L","0.08 g/L","0.1 g/L"], a: 1 },
+            { q: "Si un peatón cruza en paso de cebra, ¿qué hacer?", o: ["Tocar claxon","Esperar a que cruce","Pasar rápido","Pasar primero"], a: 1 },
+            { q: "¿Qué documento NO es obligatorio portar?", o: ["Tarjeta circulación","Licencia","Seguro","Factura"], a: 3 },
+            { q: "Distancia de seguridad con el auto de adelante:", o: ["Frenado","Seguridad","Reacción","Mínima"], a: 1 },
+            { q: "¿Se puede usar celular con manos libres?", o: ["Sí, siempre","No, nunca","Sí, en avenidas","Sí, solo GPS"], a: 1 },
+            { q: "Si conduces una moto, ¿es obligatorio el casco?", o: ["Sí","No","Solo en carretera","Solo de noche"], a: 0 },
+            { q: "¿Qué color de semáforo indica alto total?", o: ["Verde","Amarillo","Rojo","Azul"], a: 2 },
+            { q: "¿A qué edad se puede obtener la licencia de conducir en CDMX?", o: ["15 años","16 años","18 años","21 años"], a: 2 },
+            { q: "Si te encuentras una luz verde, ¿puedes pasar?", o: ["Sí","No","Solo si no hay peatones","Solo si vas despacio"], a: 0 },
+            { q: "¿Es obligatorio el cinturón de seguridad?", o: ["Sí, todos","Solo conductor","Solo adelante","No es obligatorio"], a: 0 },
+            { q: "¿Qué debe hacer si ve una luz roja en un semáforo?", o: ["Acelerar","Detenerse","Pasar con precaución","Tocar el claxon"], a: 1 },
+            { q: "Si tienes una llanta ponchada, ¿qué es lo primero?", o: ["Seguir manejando","Estacionarse en lugar seguro","Llamar a un amigo","Poner las intermitentes"], a: 1 },
+            { q: "¿Qué significa la señal de 'Alto'?", o: ["Seguir directo","Detenerse completamente","Reducir velocidad","Ceder el paso"], a: 1 },
+            { q: "¿Cuánto es el límite de velocidad en escuelas de CDMX?", o: ["20 km/h","30 km/h","40 km/h","50 km/h"], a: 0 },
+            { q: "Si manejas en reversa, ¿debes hacerlo con precaución?", o: ["Sí","No","Solo si hay gente","Solo si hay tráfico"], a: 0 },
+            { q: "¿El seguro de auto es obligatorio en CDMX?", o: ["Sí, por ley","No es obligatorio","Solo para autos nuevos","Solo en avenidas"], a: 0 },
+            { q: "¿Cómo se llama el dispositivo que sujeta a los niños en el auto?", o: ["Cinturón","Silla de seguridad","Bolsas","Airbag"], a: 1 },
+            { q: "¿Qué se debe hacer al acercarse a una curva peligrosa?", o: ["Acelerar","Reducir velocidad","Tocar claxon","Hacer señales"], a: 1 },
+            { q: "¿Los vehículos de emergencia tienen preferencia?", o: ["Sí","No","Solo en autopistas","Solo de noche"], a: 0 },
+            { q: "Si te detiene un policía de tránsito, ¿qué debes hacer?", o: ["Huir","Bajar del auto","Seguir manejo","Tocar claxon"], a: 1 },
+            { q: "¿Qué significa la señal de 'Ceda el paso'?", o: ["Alto total","Precaución y ceder si es necesario","Seguir directo","Adelantar"], a: 1 },
+            { q: "¿Se puede rebasar por la derecha?", o: ["Sí, siempre","No, está prohibido","Solo en autopista","Solo si es carril confinado"], a: 1 },
+            { q: "¿Cuántas personas pueden ir en el asiento delantero?", o: ["1","2","3","Las que quepan"], a: 0 },
+            { q: "¿Es obligatorio encender las luces en la noche?", o: ["Sí","No","Solo en carretera","Solo en ciudad"], a: 0 },
+            { q: "Si hay un bache grande, ¿qué debes hacer?", o: ["Pasarlo rápido","Evitarlo con cuidado","Pasarlo igual","Frenar encima"], a: 1 },
+            { q: "¿Qué debe hacer un conductor ante una señal de tránsito dañada?", o: ["Ignorarla","Conducir con precaución","Acelerar","Saltarse el alto"], a: 1 },
+            { q: "Los pasos peatonales sirven para:", o: ["Que los autos pasen rápido","Que los peatones crucen seguros","Estacionarse","Hacer vueltas"], a: 1 },
+            { q: "¿Está permitido fumar en el auto con un menor de edad?", o: ["Sí","No","Solo si la ventana está abierta","Solo en carreteras"], a: 1 },
+            { q: "¿Qué cantidad de alcohol en aire expirado es sancionable?", o: ["0.00","0.04","0.10","0.20"], a: 1 },
+            { q: "¿Qué se debe hacer antes de cambiar de carril?", o: ["Acelerar","Revisar espejos y señalizar","Tocar claxon","Poner música"], a: 1 },
+            { q: "¿Qué es un carril confinado?", o: ["Carril para bicis","Carril exclusivo para autobuses y taxis","Carril de alta velocidad","Carril muerto"], a: 1 },
+        ];
+
+        let questions = fullQuestions.sort(() => Math.random() - 0.5).slice(0, 32);
+        let current = 0;
+        let answers = new Array(32).fill(null);
+
+        function loadQuestion() {
+            const q = questions[current];
+            document.getElementById('question').innerText = q.q;
+            document.getElementById('counter').innerText = `Pregunta ${current+1}/${questions.length}`;
+            document.getElementById('progress').style.width = `${((current+1)/questions.length)*100}%`;
+            
+            const optDiv = document.getElementById('options');
+            optDiv.innerHTML = '';
+            q.o.forEach((opt, i) => {
+                const btn = document.createElement('div');
+                btn.className = 'option';
+                btn.innerText = opt;
+                if(answers[current] === i) btn.classList.add('selected');
+                btn.onclick = () => selectOption(i, btn);
+                optDiv.appendChild(btn);
+            });
+
+            // Ocultar los botones al cargar una nueva pregunta
+            document.getElementById('btnNext').style.display = 'none';
+            document.getElementById('btnSubmit').style.display = 'none';
+        }
+
+        function selectOption(i, el) {
+            const allOpts = document.querySelectorAll('.option');
+            allOpts.forEach(o => o.classList.remove('selected'));
+            el.classList.add('selected');
+            answers[current] = i;
+            
+            // LÓGICA CORREGIDA: Mostrar el botón correcto según la pregunta
+            const isLastQuestion = (current === questions.length - 1);
+            
+            if (isLastQuestion) {
+                // Si es la última pregunta, aparece el botón ROJO de terminar
+                document.getElementById('btnSubmit').style.display = 'block';
+            } else {
+                // Si NO es la última, aparece el botón AZUL de "Siguiente"
+                document.getElementById('btnNext').style.display = 'block';
+            }
+        }
+
+        function nextQuestion() {
+            current++;
+            loadQuestion();
+        }
+
+        function submitExam() {
+            let score = 0;
+            for(let i=0; i<questions.length; i++) {
+                if(answers[i] === questions[i].a) score++;
+            }
+
+            document.getElementById('exam-screen').style.display = 'none';
+            document.getElementById('result-screen').style.display = 'block';
+            document.getElementById('finalScore').innerText = `${score}/${questions.length}`;
+            
+            const msg = document.getElementById('resultMsg');
+            const title = document.getElementById('resultTitle');
+            
+            if(score >= 26) {
+                title.innerText = "✅ ¡Aprobado!";
+                title.className = "pass";
+                msg.innerText = "Felicidades, has obtenido tu licencia. ¡Conduce con responsabilidad!";
+            } else {
+                title.innerText = "❌ No aprobado";
+                title.className = "fail";
+                msg.innerText = "Necesitas 26/32 correctas para aprobar. Estudia el reglamento y vuelve a intentarlo.";
+            }
+        }
+
+        let timeLeft = 20 * 60;
+        const timerEl = document.getElementById('timerDisplay');
+        const timer = setInterval(() => {
+            timeLeft--;
+            const m = Math.floor(timeLeft / 60);
+            const s = timeLeft % 60;
+            timerEl.innerText = `Tiempo: ${m}:${s < 10 ? '0' : ''}${s}`;
+            if(timeLeft <= 0) {
+                clearInterval(timer);
+                submitExam();
+            }
+        }, 1000);
+
+        loadQuestion();
+    </script>
+</body>
+</html>
