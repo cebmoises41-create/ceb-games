@@ -5,83 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simulador Examen Licencia CDMX</title>
     <style>
-        /* ===== ESTILOS GLOBALES ===== */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
+        /* ===== ESTILO COPIADO DE TU LOGIN (AZUL OSCURO) ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            /* FONDO AMARILLO PÁLIDO (No chillante) */
-            background: #FFF8E1; 
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
             padding: 20px;
-            /* TEXTO GENERAL EN NEGRO */
-            color: #000000; 
         }
-
+        
         .container {
-            background: #ffffff;
+            background: rgba(255,255,255,0.95);
+            padding: 40px 35px;
+            border-radius: 30px;
+            max-width: 700px;
             width: 100%;
-            max-width: 800px;
-            padding: 30px;
-            border-radius: 15px;
-            /* BORDE NEGRO GRUESO EN EL CONTENEDOR PRINCIPAL */
-            border: 4px solid #000000; 
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
             position: relative;
         }
 
-        h1 {
-            text-align: center;
-            color: #000000; /* Negro */
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-
-        /* ===== ESTADO DE INICIO (Bienvenida) ===== */
-        #welcome-screen {
-            text-align: center;
-            padding: 20px 0;
+        /* ===== TÍTULOS ===== */
+        .logo {
+            font-size: 2.5rem;
+            margin-bottom: 5px;
         }
         
-        #welcome-screen p {
-            color: #000000; /* Negro */
-            font-size: 16px;
+        h1 {
+            color: #1a1a2e;
+            font-size: 1.8rem;
             margin-bottom: 20px;
         }
-
-        .btn-start {
-            background: #000000; /* Botón negro */
-            color: #ffffff; /* Texto blanco */
-            border: none;
-            padding: 12px 40px;
-            font-size: 18px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.3s;
+        
+        h1 span {
+            color: #0f3460;
         }
 
-        .btn-start:hover {
-            background: #333333;
-        }
-
-        /* ===== ESTADO DEL EXAMEN ===== */
-        #exam-screen {
-            display: none;
-        }
-
+        /* ===== BARRA DE PROGRESO Y PUNTUACIÓN ===== */
         .header-info {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             font-weight: bold;
-            color: #000000; /* Negro */
+            color: #1a1a2e;
+            font-size: 0.95rem;
         }
 
         .progress-bar {
@@ -89,21 +60,22 @@
             height: 8px;
             background: #e2e8f0;
             border-radius: 10px;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             overflow: hidden;
         }
 
         .progress-fill {
             height: 100%;
-            background: #000000; /* Barra de progreso negra */
+            background: #0f3460; /* Barra azul oscura */
             width: 0%;
             transition: width 0.3s ease;
         }
 
+        /* ===== PREGUNTA Y OPCIONES ===== */
         .question-text {
-            font-size: 20px;
-            margin-bottom: 25px;
-            color: #000000; /* Negro */
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #1a1a2e;
             font-weight: 600;
         }
 
@@ -111,35 +83,38 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
         .option-btn {
-            background: #f7fafc;
-            /* BORDE NEGRO EN LAS OPCIONES */
-            border: 2px solid #000000; 
-            border-radius: 8px;
-            padding: 15px;
+            background: #f8f9fa;
+            border: 2px solid #ced4da;
+            border-radius: 12px; /* Bordes redondeados como el login */
+            padding: 14px 18px;
             text-align: left;
-            font-size: 16px;
+            font-size: 1rem;
+            font-family: inherit;
             cursor: pointer;
             transition: all 0.2s;
-            color: #000000; /* Texto negro */
+            color: #1a1a2e;
         }
 
-        .option-btn:hover {
-            background: #edf2f7;
-            border-color: #333333;
+        .option-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            border-color: #0f3460;
+            box-shadow: 0 4px 8px rgba(15,52,96,0.2);
         }
 
         .option-btn.correct {
-            background: #c6f6d5;
-            border-color: #000000; /* Borde negro al acertar */
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
         }
 
         .option-btn.incorrect {
-            background: #fed7d7;
-            border-color: #000000; /* Borde negro al fallar */
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
         }
 
         .option-btn:disabled {
@@ -147,84 +122,120 @@
             opacity: 0.8;
         }
 
-        .btn-next {
-            display: none;
-            background: #000000; /* Botón negro */
+        /* ===== BOTONES (Estilo azul oscuro igual al login) ===== */
+        .btn-action {
+            background: #0f3460;
             color: white;
             border: none;
-            padding: 12px 30px;
-            font-size: 16px;
-            border-radius: 8px;
+            padding: 16px 40px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 1rem;
             cursor: pointer;
-            margin: 0 auto;
-            transition: background 0.3s;
+            transition: 0.3s;
+            font-family: inherit;
+            box-shadow: 0 4px 0 #0a1f3a;
+            margin-top: 10px;
+            display: none; /* Oculto inicialmente */
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .btn-action:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 0 #0a1f3a;
         }
 
-        .btn-next:hover {
-            background: #333333;
+        .btn-start {
+            background: #0f3460;
+            color: white;
+            border: none;
+            padding: 16px 50px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: inherit;
+            box-shadow: 0 4px 0 #0a1f3a;
         }
 
-        /* ===== PANTALLA DE RESULTADOS ===== */
-        #result-screen {
-            display: none;
-            text-align: center;
-            padding: 20px 0;
+        .btn-start:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 0 #0a1f3a;
+        }
+
+        .btn-restart {
+            background: #0f3460;
+            color: white;
+            border: none;
+            padding: 16px 40px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: inherit;
+            box-shadow: 0 4px 0 #0a1f3a;
+        }
+
+        .btn-restart:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 0 #0a1f3a;
+        }
+
+        /* ===== PANTALLAS (Inicio, Examen, Resultados) ===== */
+        #welcome-screen, #result-screen {
+            padding: 10px 0;
+        }
+
+        #welcome-screen p {
+            color: #6c757d;
+            font-size: 0.95rem;
+            margin-bottom: 25px;
         }
 
         #result-screen h2 {
             font-size: 28px;
-            margin-bottom: 15px;
-            color: #000000;
+            margin-bottom: 10px;
+            color: #1a1a2e;
         }
 
-        #result-screen .score {
+        .score-big {
             font-size: 48px;
             font-weight: bold;
-            color: #000000; /* Número negro */
+            color: #0f3460;
+            margin: 10px 0;
         }
 
         #result-screen .message {
-            margin: 20px 0;
-            font-size: 18px;
-            color: #000000; /* Texto negro */
-        }
-
-        .btn-restart {
-            background: #000000; /* Botón negro */
-            color: white;
-            border: none;
-            padding: 12px 40px;
-            font-size: 18px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .btn-restart:hover {
-            background: #333333;
+            margin: 15px 0 25px 0;
+            font-size: 1rem;
+            color: #6c757d;
         }
 
         /* ===== RESPONSIVE ===== */
         @media (max-width: 600px) {
-            .container { padding: 20px; }
-            h1 { font-size: 20px; }
-            .question-text { font-size: 18px; }
+            .container { padding: 25px 15px; }
+            h1 { font-size: 1.5rem; }
+            .question-text { font-size: 16px; }
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>🚗 Simulador Licencia CDMX</h1>
+        <div class="logo">🚗</div>
+        <h1>Simulador <span>Licencia CDMX</span></h1>
 
         <!-- Pantalla de Inicio -->
         <div id="welcome-screen">
-            <p>Responde correctamente las preguntas del examen para obtener tu licencia de conducir en la CDMX.</p>
+            <p>Responde las 10 preguntas del examen teórico para obtener tu licencia de conducir.</p>
             <button class="btn-start" onclick="startExam()">Comenzar Examen</button>
         </div>
 
         <!-- Pantalla del Examen -->
-        <div id="exam-screen">
+        <div id="exam-screen" style="display: none;">
             <div class="header-info">
                 <span id="question-counter">Pregunta 1 de 10</span>
                 <span id="score-display">Aciertos: 0</span>
@@ -239,25 +250,25 @@
                 <!-- Las opciones se llenarán con JS -->
             </div>
 
-            <button class="btn-next" id="btn-next" onclick="nextQuestion()">Siguiente Pregunta</button>
+            <button class="btn-action" id="btn-next" onclick="nextQuestion()">Siguiente Pregunta</button>
         </div>
 
         <!-- Pantalla de Resultados -->
-        <div id="result-screen">
+        <div id="result-screen" style="display: none;">
             <h2 id="result-title">¡Examen Finalizado!</h2>
-            <div class="score" id="final-score">0/10</div>
+            <div class="score-big" id="final-score">0/10</div>
             <div class="message" id="result-message">Tu resultado está siendo evaluado...</div>
             <button class="btn-restart" onclick="restartExam()">Reintentar Examen</button>
         </div>
     </div>
 
     <script>
-        // ===== BASE DE DATOS DE PREGUNTAS (10 preguntas de ejemplo) =====
+        // ===== BASE DE DATOS DE PREGUNTAS (10 preguntas) =====
         const questions = [
             {
                 question: "¿Cuál es la velocidad máxima permitida en avenidas principales de la CDMX?",
                 options: ["40 km/h", "50 km/h", "60 km/h", "70 km/h"],
-                correct: 1 // Índice 1 es "50 km/h"
+                correct: 1
             },
             {
                 question: "¿Qué significa una luz amarilla intermitente en un semáforo?",
@@ -267,7 +278,7 @@
             {
                 question: "¿Cada cuánto tiempo se debe renovar la licencia de conducir para particulares?",
                 options: ["Cada año", "Cada 2 años", "Cada 3 años", "Cada 5 años"],
-                correct: 2 // Índice 2 es "Cada 3 años"
+                correct: 2
             },
             {
                 question: "En una glorieta, ¿quién tiene la preferencia de paso?",
@@ -282,7 +293,7 @@
             {
                 question: "¿Cuál es el límite de alcohol en sangre para conducir en la CDMX?",
                 options: ["0.00 g/L", "0.05 g/L", "0.08 g/L", "0.10 g/L"],
-                correct: 1 // Nota: 0.05 o 0.04 según zona, en CDMX para automovilista es 0.05
+                correct: 1
             },
             {
                 question: "Si un peatón está cruzando la calle en un paso de cebra, ¿qué debes hacer?",
@@ -341,11 +352,9 @@
             questionCounter.textContent = `Pregunta ${currentQuestionIndex + 1} de ${questions.length}`;
             scoreDisplay.textContent = `Aciertos: ${score}`;
             
-            // Actualizar barra de progreso
             const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
             progressFill.style.width = `${progress}%`;
 
-            // Generar opciones
             optionsList.innerHTML = '';
             currentQ.options.forEach((option, index) => {
                 const btn = document.createElement('button');
@@ -355,35 +364,30 @@
                 optionsList.appendChild(btn);
             });
 
-            // Ocultar botón siguiente y resetear estado
             btnNext.style.display = 'none';
             isAnswered = false;
         }
 
         function selectOption(index, btnElement) {
-            if (isAnswered) return; // Bloquear doble click
+            if (isAnswered) return;
 
             const currentQ = questions[currentQuestionIndex];
             const buttons = optionsList.querySelectorAll('.option-btn');
             
-            // Deshabilitar todos los botones
             buttons.forEach(btn => btn.disabled = true);
 
-            // Marcar respuesta correcta e incorrecta
             if (index === currentQ.correct) {
                 btnElement.classList.add('correct');
                 score++;
                 scoreDisplay.textContent = `Aciertos: ${score}`;
             } else {
                 btnElement.classList.add('incorrect');
-                // Mostrar la correcta
                 buttons[currentQ.correct].classList.add('correct');
             }
 
             isAnswered = true;
             btnNext.style.display = 'block';
             
-            // Cambiar texto del botón si es la última pregunta
             if (currentQuestionIndex === questions.length - 1) {
                 btnNext.textContent = 'Ver Resultados';
             } else {
@@ -412,7 +416,7 @@
                 resultMessage.textContent = "Felicidades, has obtenido un excelente resultado. Estás listo para conducir.";
             } else if (percentage >= 50) {
                 resultTitle.textContent = "⚠️ Por poco...";
-                resultMessage.textContent = "Has obtenido un resultado regular. Te recomendamos estudiar un poco más el reglamento.";
+                resultMessage.textContent = "Has obtenido un resultado regular. Te recomendamos estudiar un poco más.";
             } else {
                 resultTitle.textContent = "📖 Necesitas estudiar";
                 resultMessage.textContent = "Revisa el reglamento de tránsito de la CDMX e inténtalo de nuevo.";
@@ -424,6 +428,5 @@
             welcomeScreen.style.display = 'block';
         }
     </script>
-
 </body>
 </html>
