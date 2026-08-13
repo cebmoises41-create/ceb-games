@@ -14,7 +14,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            /* CAMBIO 2: FONDO AMARILLO PÁLIDO */
+            /* FONDO AMARILLO PÁLIDO */
             background: #FFF8E1; 
             min-height: 100vh;
             display: flex;
@@ -39,13 +39,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 15px; /* Espacio entre el auto y el texto */
             margin-bottom: 5px;
         }
 
-        /* CAMBIO 1: EL AUTO NEGRO MÁS GRANDE */
+        /* AUTO NEGRO MÁS GRANDE */
         .header-top .logo-auto {
-            width: 60px; /* Antes era pequeño, ahora es más grande */
+            width: 70px; /* Tamaño grande */
             height: auto;
         }
 
@@ -197,11 +197,11 @@
     <div class="container">
         <!-- ENCABEZADO -->
         <div class="header-top">
-            <!-- CAMBIO 1: AUTO NEGRO MÁS GRANDE (Uso un emoji, si tienes imagen PNG cámbialo por <img src="...">) -->
+            <!-- AUTO NEGRO GRANDE (Link a imagen de auto negro real) -->
             <img src="https://cdn-icons-png.flaticon.com/512/3202/3202927.png" alt="Auto Negro" class="logo-auto">
             
-            <!-- CAMBIO 3: NOMBRE DE LA ESCUELA -->
-            <h1>Instituto Tecnológico de México</h1> 
+            <!-- NOMBRE CORRECTO DE LA ESCUELA -->
+            <h1>Escuela de Manejo Conductor Tras el Volante</h1> 
         </div>
         <div class="header-subtitle">Licencia de Conducir · Simulador Oficial</div>
 
@@ -225,7 +225,6 @@
         <div class="levels-container">
             
             <!-- TARJETA FÁCIL -->
-            <!-- Si tienes un archivo examen_facil.html, cambia el href -->
             <a href="examen_facil.html" class="level-card facil">
                 <div class="level-icon">🟢</div>
                 <h3>Fácil</h3>
@@ -237,7 +236,6 @@
             </a>
 
             <!-- TARJETA DIFÍCIL -->
-            <!-- Si tienes un archivo examen_dificil.html, cambia el href -->
             <a href="examen_dificil.html" class="level-card dificil">
                 <div class="level-icon">🔴</div>
                 <h3>Difícil</h3>
