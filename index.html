@@ -14,112 +14,157 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            /* AQUÍ ESTÁ EL AMARILLO SUAVE QUE PEDISTE */
-            background: #FFF5C2; 
+            /* AMARILLO MÁS PÁLIDO (NO CHILLANTE) */
+            background: #FFF8E1; 
+            color: #000000; /* Texto general en NEGRO */
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
             padding: 20px;
         }
 
-        /* ===== ESTILO DEL NUEVO AUTO NEGRO ===== */
-        .auto-negro {
-            width: 350px; /* Tamaño grande como pediste */
-            height: auto;
-            display: block;
-            margin: 20px auto; /* Centrado y con espacio arriba/abajo */
-            filter: drop-shadow(0px 5px 10px rgba(0,0,0,0.2)); /* Sombra sutil */
-        }
-
-        /* ===== CONTENEDOR PRINCIPAL (Donde irán las preguntas) ===== */
+        /* ===== CONTENEDOR PRINCIPAL ===== */
         .contenedor-juego {
-            background-color: white;
-            max-width: 800px;
+            background-color: #ffffff;
+            max-width: 700px;
             width: 100%;
             padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.1);
-            margin-top: 10px;
+            /* MARGEN NEGRO (borde grueso) */
+            border: 4px solid #000000; 
+            border-radius: 12px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
         }
 
-        /* ===== ESTILOS BÁSICOS PARA EL EXAMEN ===== */
-        h1 {
-            font-size: 24px;
-            color: #333;
+        /* ===== TÍTULOS Y TEXTOS EN NEGRO ===== */
+        h1, h2, h3 {
+            color: #000000;
             text-align: center;
             margin-bottom: 20px;
         }
 
         .pregunta {
-            font-size: 18px;
-            margin-bottom: 15px;
+            font-size: 20px;
             font-weight: bold;
-            color: #222;
-        }
-
-        .opciones {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+            color: #000000;
             margin-bottom: 20px;
         }
 
+        /* ===== ESTILO DE LAS OPCIONES (Tipo tarjeta como te gustaba) ===== */
+        .opciones {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
         .opcion {
-            padding: 12px 15px;
-            border: 1px solid #ddd;
+            padding: 15px 20px;
+            /* MARGEN NEGRO en cada opción */
+            border: 2px solid #000000; 
             border-radius: 8px;
+            color: #000000;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: all 0.3s;
+            background-color: #fafafa;
         }
 
         .opcion:hover {
-            background-color: #f0f0f0;
+            background-color: #e0e0e0; /* Un gris suave al pasar el mouse */
+        }
+
+        /* ===== BOTONES Y CONTROLES ===== */
+        .controles-modo {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            /* MARGEN NEGRO en los botones */
+            border: 2px solid #000000; 
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        .btn:hover {
+            background-color: #000000;
+            color: #ffffff;
         }
 
         .btn-siguiente {
-            background-color: #2c3e50;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-size: 16px;
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: bold;
             border-radius: 8px;
             cursor: pointer;
-            width: 100%;
-            transition: background 0.3s;
+            /* MARGEN NEGRO en el botón de siguiente */
+            border: 2px solid #000000;
+            background-color: #ffffff;
+            color: #000000;
+            margin-top: 10px;
         }
 
         .btn-siguiente:hover {
-            background-color: #1a252f;
+            background-color: #000000;
+            color: #ffffff;
         }
     </style>
 </head>
 <body>
 
-    <!-- ===== EL AUTO NEGRO (Reemplazó a la carita, avión y cuadro) ===== -->
-    <img src="https://cdn-icons-png.flaticon.com/512/3202/3202927.png" alt="Auto Negro" class="auto-negro">
-
-    <!-- ===== CONTENEDOR DEL EXAMEN ===== -->
+    <!-- Contenedor principal -->
     <div class="contenedor-juego">
-        <h1>Simulador de Examen</h1>
         
+        <!-- Título -->
+        <h1>Simulador de Examen</h1>
+
+        <!-- SELECTOR DE MODO FÁCIL Y DIFÍCIL -->
+        <div class="controles-modo">
+            <button class="btn" onclick="seleccionarModo('facil')">Modo Fácil</button>
+            <button class="btn" onclick="seleccionarModo('dificil')">Modo Difícil</button>
+        </div>
+
+        <!-- Área de la pregunta (Aquí va la lógica de tu juego) -->
         <div id="pregunta-container">
-            <p class="pregunta" id="texto-pregunta">¿Cuál es la velocidad máxima en avenidas principales?</p>
+            <p class="pregunta" id="texto-pregunta">¿Listo para comenzar? Selecciona un modo.</p>
             
             <div class="opciones" id="opciones-container">
-                <div class="opcion">A) 30 km/h</div>
-                <div class="opcion">B) 50 km/h</div>
-                <div class="opcion">C) 70 km/h</div>
-                <div class="opcion">D) 90 km/h</div>
+                <!-- Ejemplo de opciones visuales -->
+                <div class="opcion">Opción A</div>
+                <div class="opcion">Opción B</div>
+                <div class="opcion">Opción C</div>
+                <div class="opcion">Opción D</div>
             </div>
 
-            <button class="btn-siguiente">Siguiente pregunta</button>
+            <button class="btn-siguiente" id="btn-siguiente">Siguiente pregunta</button>
         </div>
     </div>
 
-    <!-- Aquí iría el enlace a tu script.js si tienes la lógica del examen en otro archivo -->
+    <!-- Aquí va el enlace a tu archivo de lógica (script.js) -->
     <!-- <script src="script.js"></script> -->
+
+    <!-- (Opcional) Si quieres probar que los botones funcionan visualmente, copia esto: -->
+    <script>
+        function seleccionarModo(modo) {
+            const textoPregunta = document.getElementById('texto-pregunta');
+            if(modo === 'facil') {
+                textoPregunta.textContent = "Modo Fácil activado. ¿Cuál es el color de un semáforo en verde?";
+            } else {
+                textoPregunta.textContent = "Modo Difícil activado. ¿A qué distancia debo frenar si voy a 60 km/h?";
+            }
+        }
+    </script>
 
 </body>
 </html>
