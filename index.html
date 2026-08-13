@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Escuela de Manejo</title>
+    <title>Simulador Examen Licencia CDMX</title>
     <style>
         /* ===== ESTILOS GLOBALES ===== */
         * {
@@ -14,554 +14,112 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #000000;
-            /* Fondo negro */
+            /* AQUÍ ESTÁ EL AMARILLO SUAVE QUE PEDISTE */
+            background: #FFF5C2; 
             min-height: 100vh;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            justify-content: flex-start;
             padding: 20px;
-            background-image: 
-                radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 50%, rgba(255, 215, 0, 0.1) 0%, transparent 50%);
         }
 
-        .container {
-            max-width: 820px;
+        /* ===== ESTILO DEL NUEVO AUTO NEGRO ===== */
+        .auto-negro {
+            width: 350px; /* Tamaño grande como pediste */
+            height: auto;
+            display: block;
+            margin: 20px auto; /* Centrado y con espacio arriba/abajo */
+            filter: drop-shadow(0px 5px 10px rgba(0,0,0,0.2)); /* Sombra sutil */
+        }
+
+        /* ===== CONTENEDOR PRINCIPAL (Donde irán las preguntas) ===== */
+        .contenedor-juego {
+            background-color: white;
+            max-width: 800px;
             width: 100%;
-            background: #FFD700;
-            /* Fondo amarillo */
-            border-radius: 24px;
-            box-shadow: 0 20px 60px rgba(255, 215, 0, 0.3);
-            padding: 30px 35px 40px;
-            transition: all 0.25s;
-            border: 3px solid #000000;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.1);
+            margin-top: 10px;
         }
 
-        /* ===== TÍTULO CON ICONO ===== */
-        .header-icon {
-            text-align: center;
-            margin-bottom: 10px;
-            position: relative;
-        }
-
-        .header-icon .icono-conductor {
-            font-size: 80px;
-            display: block;
-            line-height: 1;
-            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
-            animation: floatIcon 3s ease-in-out infinite;
-        }
-
-        @keyframes floatIcon {
-            0%,
-            100% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-        }
-
-        .header-icon .icono-conductor span {
-            display: inline-block;
-            position: relative;
-        }
-
-        .header-icon .licencia-icon {
-            font-size: 30px;
-            position: absolute;
-            bottom: -5px;
-            right: -10px;
-            background: #FFD700;
-            border-radius: 50%;
-            padding: 5px;
-            border: 2px solid #000;
-            animation: pulseLicencia 2s ease-in-out infinite;
-        }
-
-        @keyframes pulseLicencia {
-            0%,
-            100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.15);
-            }
-        }
-
+        /* ===== ESTILOS BÁSICOS PARA EL EXAMEN ===== */
         h1 {
-            font-size: 42px;
-            font-weight: 900;
-            color: #000000;
-            text-align: center;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-top: 5px;
-            margin-bottom: 0;
-            text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.1);
-            border-bottom: 4px solid #000000;
-            padding-bottom: 10px;
-        }
-
-        .subhead {
-            color: #000000;
-            font-size: 20px;
-            font-weight: 700;
-            text-align: center;
-            margin: 5px 0 18px 0;
-            background: rgba(0, 0, 0, 0.05);
-            border-radius: 8px;
-            padding: 10px 16px;
-            letter-spacing: 1px;
-            border: 2px dashed #000000;
-        }
-
-        .subhead small {
-            font-weight: 400;
-            font-size: 16px;
+            font-size: 24px;
             color: #333;
-        }
-
-        /* ===== PANTALLA DE INICIO ===== */
-        #inicio {
             text-align: center;
-            padding: 20px 0 10px;
+            margin-bottom: 20px;
         }
 
-        #inicio h2 {
-            font-size: 22px;
-            color: #000000;
-            margin-bottom: 10px;
-        }
-
-        #inicio p {
-            color: #1a1a1a;
-            max-width: 500px;
-            margin: 0 auto 28px auto;
-            font-size: 16px;
-            line-height: 1.6;
-        }
-
-        .botonera {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 18px;
-        }
-
-        .btn-modo {
-            background: #000000;
-            border: 3px solid #000000;
-            border-radius: 18px;
-            padding: 18px 30px;
-            width: 200px;
-            cursor: pointer;
-            transition: 0.2s;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
-            text-align: center;
-            color: #FFD700;
-        }
-
-        .btn-modo:hover {
-            border-color: #FFD700;
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-            background: #1a1a1a;
-        }
-
-        .btn-modo .icono {
-            font-size: 34px;
-            display: block;
-            margin-bottom: 6px;
-        }
-
-        .btn-modo .titulo-modo {
-            font-weight: 700;
-            font-size: 20px;
-            color: #FFD700;
-        }
-
-        .btn-modo .desc-modo {
-            font-size: 13px;
-            color: #d4a800;
-            margin-top: 4px;
-        }
-
-        .btn-modo .detalle-modo {
-            font-size: 12px;
-            color: #FFD700;
-            font-weight: 600;
-            margin-top: 8px;
-            background: rgba(255, 215, 0, 0.15);
-            padding: 4px 10px;
-            border-radius: 40px;
-            display: inline-block;
-        }
-
-        /* ===== PANTALLA DE EXAMEN ===== */
-        #examen {
-            display: none;
-        }
-
-        .encabezado-examen {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
-            border-bottom: 3px solid #000000;
-            padding-bottom: 14px;
-            margin-bottom: 22px;
-        }
-
-        .info-modo {
-            background: #000000;
-            padding: 4px 16px;
-            border-radius: 40px;
-            font-size: 14px;
-            font-weight: 600;
-            color: #FFD700;
-        }
-
-        .temporizador {
-            font-size: 20px;
-            font-weight: 700;
-            color: #000000;
-            background: rgba(0, 0, 0, 0.08);
-            padding: 5px 18px;
-            border-radius: 40px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border: 2px solid #000000;
-        }
-
-        .temporizador .tiempo {
-            color: #c44536;
-            min-width: 42px;
-            display: inline-block;
-            text-align: center;
-        }
-
-        .progreso {
-            font-size: 14px;
-            color: #000000;
-            font-weight: 500;
-        }
-
-        /* ===== PREGUNTA ===== */
-        .pregunta-card {
-            background: #fef9e7;
-            border-radius: 16px;
-            padding: 20px 22px;
-            margin: 8px 0 16px 0;
-            border: 2px solid #000000;
-        }
-
-        .pregunta-texto {
-            font-size: 19px;
-            font-weight: 600;
-            color: #000000;
-            line-height: 1.5;
-            margin-bottom: 14px;
+        .pregunta {
+            font-size: 18px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            color: #222;
         }
 
         .opciones {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 10px;
+            margin-bottom: 20px;
         }
 
         .opcion {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            background: white;
-            border: 2px solid #000000;
-            border-radius: 12px;
-            padding: 12px 18px;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
             cursor: pointer;
-            transition: 0.15s;
-            font-size: 16px;
-            color: #000000;
+            transition: background 0.3s;
         }
 
         .opcion:hover {
-            border-color: #FFD700;
-            background: #fff8dc;
+            background-color: #f0f0f0;
         }
 
-        .opcion.seleccionada {
-            border-color: #FFD700;
-            background: #000000;
-            color: #FFD700;
-        }
-
-        .opcion .letra {
-            font-weight: 700;
-            color: #000000;
-            min-width: 28px;
-        }
-
-        .opcion.seleccionada .letra {
-            color: #FFD700;
-        }
-
-        .opcion .texto {
-            flex: 1;
-        }
-
-        /* ===== PISTA ===== */
-        .pista-box {
-            background: #000000;
-            border-left: 5px solid #FFD700;
-            padding: 12px 18px;
-            border-radius: 10px;
-            margin: 10px 0 14px 0;
-            font-size: 14px;
-            color: #FFD700;
-            display: none;
-        }
-
-        .pista-box.visible {
-            display: block;
-        }
-
-        /* ===== NAVEGACIÓN ===== */
-        .nav-examen {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 14px;
-            margin-top: 18px;
-        }
-
-        .nav-examen button {
-            background: #000000;
-            border: 2px solid #000000;
-            border-radius: 40px;
-            padding: 10px 28px;
-            font-weight: 600;
-            font-size: 15px;
-            color: #FFD700;
-            cursor: pointer;
-            transition: 0.15s;
-        }
-
-        .nav-examen button:hover {
-            background: #1a1a1a;
-            border-color: #FFD700;
-            transform: scale(1.02);
-        }
-
-        .nav-examen button:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .btn-principal {
-            background: #000000 !important;
-            border-color: #000000 !important;
-            color: #FFD700 !important;
-        }
-
-        .btn-principal:hover {
-            background: #1a1a1a !important;
-            border-color: #FFD700 !important;
-        }
-
-        /* ===== RESULTADOS ===== */
-        #resultados {
-            display: none;
-            text-align: center;
-            padding: 24px 10px 10px;
-        }
-
-        #resultados .calificacion {
-            font-size: 56px;
-            font-weight: 800;
-            color: #000000;
-        }
-
-        #resultados .calificacion span {
-            font-size: 24px;
-            font-weight: 400;
-            color: #333;
-        }
-
-        #resultados .estado {
-            font-size: 22px;
-            font-weight: 700;
-            margin: 8px 0 4px;
-        }
-
-        #resultados .estado.aprobado {
-            color: #1f8b4c;
-        }
-        #resultados .estado.reprobado {
-            color: #c44536;
-        }
-
-        #resultados .detalle-resultado {
-            color: #000000;
-            font-size: 15px;
-            margin: 12px 0 20px;
-        }
-
-        .btn-reiniciar {
-            background: #000000;
+        .btn-siguiente {
+            background-color: #2c3e50;
+            color: white;
             border: none;
-            color: #FFD700;
-            padding: 12px 40px;
-            border-radius: 40px;
-            font-size: 17px;
-            font-weight: 700;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: 0.2s;
-            border: 2px solid #000000;
+            width: 100%;
+            transition: background 0.3s;
         }
 
-        .btn-reiniciar:hover {
-            background: #1a1a1a;
-            transform: scale(1.02);
-        }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 600px) {
-            .container {
-                padding: 20px;
-            }
-            h1 {
-                font-size: 28px;
-            }
-            .subhead {
-                font-size: 16px;
-            }
-            .btn-modo {
-                width: 100%;
-                max-width: 260px;
-            }
-            .botonera {
-                flex-direction: column;
-                align-items: center;
-            }
-            .encabezado-examen {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 8px;
-            }
-            .temporizador {
-                justify-content: center;
-            }
-            .nav-examen {
-                flex-direction: column;
-            }
-            .nav-examen button {
-                width: 100%;
-            }
-            .pregunta-texto {
-                font-size: 17px;
-            }
-            .header-icon .icono-conductor {
-                font-size: 50px;
-            }
+        .btn-siguiente:hover {
+            background-color: #1a252f;
         }
     </style>
 </head>
 <body>
 
-    <div class="container" id="app">
+    <!-- ===== EL AUTO NEGRO (Reemplazó a la carita, avión y cuadro) ===== -->
+    <img src="https://cdn-icons-png.flaticon.com/512/3202/3202927.png" alt="Auto Negro" class="auto-negro">
 
-        <!-- ===== ENCABEZADO CON ICONO ===== -->
-        <div class="header-icon">
-            <div class="icono-conductor">
-                <span>
-                    🧑‍✈️
-                    <span class="licencia-icon">🪪</span>
-                </span>
+    <!-- ===== CONTENEDOR DEL EXAMEN ===== -->
+    <div class="contenedor-juego">
+        <h1>Simulador de Examen</h1>
+        
+        <div id="pregunta-container">
+            <p class="pregunta" id="texto-pregunta">¿Cuál es la velocidad máxima en avenidas principales?</p>
+            
+            <div class="opciones" id="opciones-container">
+                <div class="opcion">A) 30 km/h</div>
+                <div class="opcion">B) 50 km/h</div>
+                <div class="opcion">C) 70 km/h</div>
+                <div class="opcion">D) 90 km/h</div>
             </div>
+
+            <button class="btn-siguiente">Siguiente pregunta</button>
         </div>
-
-        <h1>🏫 ESCUELA DE MANEJO</h1>
-        <div class="subhead">
-            🚗 Conductor tras el volante
-            <br><small>Simulador de Examen - Licencia CDMX</small>
-        </div>
-
-        <!-- ===== PANTALLA DE INICIO ===== -->
-        <div id="inicio">
-            <h2>🧠 Elige tu nivel</h2>
-            <p>
-                Practica con preguntas reales del Reglamento de Tránsito y la Ley de Movilidad.
-                El modo <strong>Difícil</strong> replica las condiciones exactas del examen oficial.
-            </p>
-            <div class="botonera">
-                <!-- MODO FÁCIL -->
-                <div class="btn-modo" onclick="iniciarExamen('facil')">
-                    <span class="icono">🟢</span>
-                    <div class="titulo-modo">Fácil</div>
-                    <div class="desc-modo">Con pistas y más tiempo</div>
-                    <div class="detalle-modo">⏱ 30 min · 💡 2 pistas</div>
-                </div>
-                <!-- MODO DIFÍCIL -->
-                <div class="btn-modo" onclick="iniciarExamen('dificil')">
-                    <span class="icono">🔴</span>
-                    <div class="titulo-modo">Difícil</div>
-                    <div class="desc-modo">Como el examen real</div>
-                    <div class="detalle-modo">⏱ 25 min · sin pistas</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ===== PANTALLA DE EXAMEN ===== -->
-        <div id="examen">
-            <div class="encabezado-examen">
-                <div>
-                    <span class="info-modo" id="modoLabel">⚡ Modo Fácil</span>
-                    <span class="progreso" id="progresoLabel">Pregunta 1 / 20</span>
-                </div>
-                <div class="temporizador">
-                    ⏱ <span class="tiempo" id="timerDisplay">25:00</span>
-                </div>
-            </div>
-
-            <div class="pregunta-card">
-                <div class="pregunta-texto" id="preguntaTexto">Cargando pregunta...</div>
-                <div class="opciones" id="opcionesContainer"></div>
-                <!-- Pista -->
-                <div class="pista-box" id="pistaBox">
-                    💡 <span id="pistaTexto">Pista: aquí aparecerá una ayuda.</span>
-                </div>
-            </div>
-
-            <div class="nav-examen">
-                <button id="btnAnterior" onclick="preguntaAnterior()">◀ Anterior</button>
-                <div>
-                    <button id="btnPista" onclick="usarPista()" style="border-color:#FFD700; color:#FFD700; background:#000;">💡 Pista</button>
-                    <button id="btnSiguiente" class="btn-principal" onclick="preguntaSiguiente()">Siguiente ▶</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- ===== PANTALLA DE RESULTADOS ===== -->
-        <div id="resultados">
-            <div class="calificacion">
-                <span id="puntajeFinal">8.0</span> <span>/ 10</span>
-            </div>
-            <div class="estado" id="estadoFinal">✅ ¡Aprobado!</div>
-            <div class="detalle-resultado" id="detalleFinal">
-                Acertaste 16 de 20 preguntas.
-            </div>
-            <button class="btn-reiniciar" onclick="reiniciar()">🔄 Volver a empezar</button>
-        </div>
-
     </div>
 
-    <!-- ===== ARCHIVO JS ===== -->
-    <script src="script.js"></script>
+    <!-- Aquí iría el enlace a tu script.js si tienes la lógica del examen en otro archivo -->
+    <!-- <script src="script.js"></script> -->
 
 </body>
 </html>
